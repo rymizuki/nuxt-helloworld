@@ -28,6 +28,7 @@ jobs:
             - ./build
 
   deploy_debug:
+    machine: true
     working_directory: ~/project
     steps:
       - attach_workspace:
