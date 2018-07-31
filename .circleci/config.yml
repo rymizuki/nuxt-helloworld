@@ -27,6 +27,22 @@ jobs:
             - ./.nuxt
             - ./build
 
+  deploy_debug:
+    build:
+      machine: true
+      steps:
+        - checkout
+        - run:
+            name: 'test'
+            command: |
+              docker-compose -f docker-compose.production.yml up -d --build
+        - run:
+            name: 'pwd'
+            command: |
+              set -x
+              pwd
+              ls -lah
+
   deploy_static:
     docker:
       - image: circleci/python:2.7-jessie
@@ -67,6 +83,12 @@ workflows:
   build-deploy:
     jobs:
       - build
+      - deploy_test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
       - deploy_static:
           requires:
             - build
