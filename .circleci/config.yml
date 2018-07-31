@@ -5,10 +5,13 @@ jobs:
     steps:
       - checkout
       - run:
+          name: build image
+          command: docker-compose -f docker-compose.production.yml build
+      - run:
           name: Start container and verify it's working
           command: |
             set -x
-            docker-compose -f docker-compose.production.yml up -d --build
+            docker-compose -f docker-compose.production.yml up -d
       - run:
           name: export artifacts
           command: |
@@ -31,18 +34,18 @@ jobs:
     machine: true
     working_directory: ~/project
     steps:
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: 'test'
-          command: |
-            docker-compose -f docker-compose.production.yml up -d --build
+      - attach_workspace
+          at: /tmp/workspace
       - run:
           name: 'pwd'
           command: |
             set -x
             pwd
             ls -lah
+      - run:
+          name: 'test'
+          command: |
+            docker-compose -f docker-compose.production.yml up -d --build
 
   deploy_static:
     docker:
