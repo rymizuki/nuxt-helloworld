@@ -28,20 +28,19 @@ jobs:
             - ./build
 
   deploy_debug:
-    build:
-      machine: true
-      steps:
-        - checkout
-        - run:
-            name: 'test'
-            command: |
-              docker-compose -f docker-compose.production.yml up -d --build
-        - run:
-            name: 'pwd'
-            command: |
-              set -x
-              pwd
-              ls -lah
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: 'test'
+          command: |
+            docker-compose -f docker-compose.production.yml up -d --build
+      - run:
+          name: 'pwd'
+          command: |
+            set -x
+            pwd
+            ls -lah
 
   deploy_static:
     docker:
