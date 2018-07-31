@@ -15,6 +15,12 @@ jobs:
             set -x
             docker cp `docker-compose ps -q app`:/app/build ~/build
             docker cp `docker-compose ps -q app`:/app/.nuxt ~/.nuxt
+      - run:
+          name: pwd
+          command: |
+            set -x
+            pwd
+            ls -lah
       - persist_to_workspace:
           root: ~/
           paths:
