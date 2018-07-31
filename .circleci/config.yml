@@ -44,7 +44,7 @@ jobs:
           at: .
       - run:
           name: Install serverless
-          command: npm install -g serverless
+          command: sudo npm install -g serverless
       - run:
           name: Deploy to S3
           command: serverless deploy
