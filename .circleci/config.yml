@@ -1,0 +1,69 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Start container and verify it's working
+          command: |
+            set -x
+            docker-compose -f docker-compose.production.yml up -d --build
+      - run:
+          name: export artifacts
+          command: |
+            set -x
+            docker cp `docker-compose ps -q dev`:/app/build ~/build
+            docker cp `docker-compose ps -q dev`:/app/.nuxt ~/.nuxt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./.nuxt
+            - ./build
+
+  deploy_static:
+    docker:
+      - image: circleci/python:2.7-jessie
+    working_directory: ~/
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli
+      - run:
+          name: Deploy to S3
+          command: aws s3 sync ./.nuxt/dist s3://website-nuxt-helloworld --delete
+
+  deploy_functions:
+    docker:
+      - image: circleci/node:8.10-alpine
+    working_directory: ~/
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install serverless
+          command: npm install -g serverless
+      - run:
+          name: Deploy to S3
+          command: serverless deploy
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy_static:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - deploy_functions:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
