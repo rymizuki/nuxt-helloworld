@@ -16,6 +16,7 @@ jobs:
           name: export artifacts
           command: |
             set -x
+            mkdir -p ~/dist
             docker cp `docker-compose ps -q app`:/app/build ~/dist/build
             docker cp `docker-compose ps -q app`:/app/.nuxt ~/dist/.nuxt
             docker cp `docker-compose ps -q app`:/app/node_modules ~/dist/node_modules
