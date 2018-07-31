@@ -6,12 +6,15 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "npm run build:nuxt && npm run build:server",
+    "build:nuxt": "nuxt build",
+    "build:server": "backpack build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
-    "deploy:s3": "aws s3 sync ./.nuxt/dist s3://website-nuxt-helloworld/nuxt  --acl public-read --cache-control \"public, max-age=31557600\""
+    "deploy:s3": "aws s3 sync ./.nuxt/dist s3://website-nuxt-helloworld/nuxt  --acl public-read --cache-control \"public, max-age=31557600\"",
+    "deploy:serverless": "serverless deploy"
   },
   "dependencies": {
     "aws-serverless-express": "^3.2.0",

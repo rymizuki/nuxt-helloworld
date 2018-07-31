@@ -10,13 +10,16 @@ RUN apk --no-cache --update add curl \
  && python get-pip.py \
  && pip install awscli
 
+# FOR serverless cli
+RUN npm install -g serverless
+
 WORKDIR /app
 
 COPY . /app
 
-RUN npm install
-RUN npm run build
+RUN yarn install
+RUN yarn build
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
 
 EXPOSE 3000

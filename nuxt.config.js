@@ -34,6 +34,9 @@ module.exports = {
         })
       }
     }
+  },
+  render: {
+    gzip: false
   }
 }
 

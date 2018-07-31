@@ -12,6 +12,7 @@ dist
 
 # AWS
 .aws
+.serverless
 
 # Backpack build
 build
