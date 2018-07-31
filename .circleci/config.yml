@@ -16,8 +16,10 @@ jobs:
           name: export artifacts
           command: |
             set -x
-            docker cp `docker-compose ps -q app`:/app/build ~/build
-            docker cp `docker-compose ps -q app`:/app/.nuxt ~/.nuxt
+            docker cp `docker-compose ps -q app`:/app/build ~/dist/build
+            docker cp `docker-compose ps -q app`:/app/.nuxt ~/dist/.nuxt
+            docker cp `docker-compose ps -q app`:/app/node_modules ~/dist/node_modules
+            docker cp `docker-compose ps -q app`:/app/serverless.yml ~/dist/serverless.yml
       - run:
           name: pwd
           command: |
@@ -47,22 +49,25 @@ jobs:
   deploy_functions:
     docker:
       - image: circleci/node:8-stretch
+    attach_workspace:
+      at: ~/project
     steps:
-      - checkout
-      - run:
-          name: pwd
-          command: |
-            set -x
-            pwd
-            ls -lah
       - run:
           name: Install serverless
           command: sudo npm install -g serverless
       - run:
           name: cp
           command: |
-            cp -R ~/.nuxt ./.nuxt
-            cp -R ~/build ./build
+            cp -R ~/dist/.nuxt ./.nuxt
+            cp -R ~/dist/build ./build
+            cp -R ~/dist/node_modules ./node_modules
+            cp -R ~/dist/serverless.yml ./serverless.yml
+      - run:
+          name: pwd
+          command: |
+            set -x
+            pwd
+            ls -lah
       - run:
           name: Deploy to S3
           command: serverless deploy
