@@ -44,14 +44,15 @@ jobs:
           command: sudo pip install awscli
       - run:
           name: Deploy to S3
-          command: aws s3 sync ./.nuxt/dist s3://website-nuxt-helloworld --delete
+          command: aws s3 sync ~/dist/.nuxt/dist s3://website-nuxt-helloworld --delete
 
   deploy_functions:
     docker:
       - image: circleci/node:8-stretch
-    attach_workspace:
-      at: ~/project
+    working_directory: ~/
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Install serverless
           command: sudo npm install -g serverless
