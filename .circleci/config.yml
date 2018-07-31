@@ -37,7 +37,7 @@ jobs:
 
   deploy_functions:
     docker:
-      - image: circleci/node:8.10-alpine
+      - image: circleci/node:8-stretch
     working_directory: ~/
     steps:
       - attach_workspace:
