@@ -28,9 +28,10 @@ jobs:
             - ./build
 
   deploy_debug:
-    machine: true
+    working_directory: ~/project
     steps:
-      - checkout
+      - attach_workspace:
+        at: ~/project
       - run:
           name: 'test'
           command: |
