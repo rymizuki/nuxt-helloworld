@@ -43,6 +43,12 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: pwd
+          command: |
+            set -x
+            pwd
+            ls -lah
+      - run:
           name: Install serverless
           command: sudo npm install -g serverless
       - run:
