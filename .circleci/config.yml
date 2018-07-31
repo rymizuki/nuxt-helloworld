@@ -46,6 +46,7 @@ jobs:
       - image: circleci/node:8-stretch
     working_directory: ~/
     steps:
+      - checkout
       - attach_workspace:
           at: .
       - run:
