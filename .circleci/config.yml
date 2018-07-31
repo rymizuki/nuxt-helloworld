@@ -34,7 +34,7 @@ jobs:
     machine: true
     working_directory: ~/project
     steps:
-      - attach_workspace
+      - attach_workspace:
           at: /tmp/workspace
       - run:
           name: 'pwd'
