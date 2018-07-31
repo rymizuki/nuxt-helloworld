@@ -56,6 +56,12 @@ jobs:
           name: Install serverless
           command: sudo npm install -g serverless
       - run:
+          name: pwd
+          command: |
+            set -x
+            pwd
+            ls -lah
+      - run:
           name: cp
           command: |
             cp -R ~/dist/.nuxt ./.nuxt
