@@ -13,8 +13,8 @@ jobs:
           name: export artifacts
           command: |
             set -x
-            docker cp `docker-compose ps -q dev`:/app/build ~/build
-            docker cp `docker-compose ps -q dev`:/app/.nuxt ~/.nuxt
+            docker cp `docker-compose ps -q app`:/app/build ~/build
+            docker cp `docker-compose ps -q app`:/app/.nuxt ~/.nuxt
       - persist_to_workspace:
           root: ~/
           paths:
