@@ -30,23 +30,6 @@ jobs:
             - ./.nuxt
             - ./build
 
-  deploy_debug:
-    machine: true
-    working_directory: ~/project
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run:
-          name: 'pwd'
-          command: |
-            set -x
-            pwd
-            ls -lah
-      - run:
-          name: 'test'
-          command: |
-            docker-compose -f docker-compose.production.yml up -d --build
-
   deploy_static:
     docker:
       - image: circleci/python:2.7-jessie
@@ -64,11 +47,8 @@ jobs:
   deploy_functions:
     docker:
       - image: circleci/node:8-stretch
-    working_directory: ~/
     steps:
       - checkout
-      - attach_workspace:
-          at: .
       - run:
           name: pwd
           command: |
@@ -79,6 +59,11 @@ jobs:
           name: Install serverless
           command: sudo npm install -g serverless
       - run:
+          name: cp
+          command: |
+            cp -R ~/.nuxt ./.nuxt
+            cp -R ~/build ./build
+      - run:
           name: Deploy to S3
           command: serverless deploy
 
@@ -87,12 +72,6 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy_debug:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
       - deploy_static:
           requires:
             - build
