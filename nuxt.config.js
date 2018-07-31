@@ -21,6 +21,8 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    extractCSS: true,
+    publicPath: 'http://website-nuxt-helloworld.s3-website-ap-northeast-1.amazonaws.com/nuxt/',
     /*
     ** Run ESLint on save
     */
