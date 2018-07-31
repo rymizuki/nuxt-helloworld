@@ -32,7 +32,7 @@ jobs:
     working_directory: ~/project
     steps:
       - attach_workspace:
-        at: ~/project
+          at: ~/project
       - run:
           name: 'test'
           command: |
