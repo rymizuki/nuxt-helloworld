@@ -4,7 +4,7 @@ import awsServerlessExpress from 'aws-serverless-express'
 import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware'
 import { Server } from 'tls';
 
-const config = require('./nuxt.config')
+const config = require('../nuxt.config')
 config.dev = false
 config.mode = 'universal'
 const nuxt = new Nuxt(config)
