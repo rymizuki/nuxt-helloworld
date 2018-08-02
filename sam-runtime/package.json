@@ -1,0 +1,39 @@
+{
+  "name": "nuxt-helloworld",
+  "version": "1.0.0",
+  "description": "Example for Nuxt.js",
+  "author": "mizuki_r <ry.mizuki@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "npm run build:nuxt && npm run build:server",
+    "build:nuxt": "nuxt build",
+    "build:server": "backpack build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint",
+    "deploy:s3": "aws s3 sync ./.nuxt/dist s3://website-nuxt-helloworld/nuxt  --acl public-read --cache-control \"public, max-age=31557600\"",
+    "deploy:serverless": "serverless deploy"
+  },
+  "dependencies": {
+    "aws-sam-local": "^0.2.11",
+    "aws-serverless-express": "^3.2.0",
+    "express": "^4.16.3",
+    "nuxt": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-dynamic-import-node": "^2.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "backpack-core": "^0.7.0",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0"
+  }
+}
