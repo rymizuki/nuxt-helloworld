@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+cd app
+yarn install
+yarn build
+cd -

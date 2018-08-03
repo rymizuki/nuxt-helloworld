@@ -21,4 +21,4 @@ sam deploy \
   --stack-name $SAM_S3_BUCKET \
   --capabilities CAPABILITY_IAM
 
-aws s3 sync ${S3_SOURCE_DIR}/ s3://${S3_BUCKET}
+aws s3 sync ${S3_SOURCE_DIR}/ s3://${S3_BUCKET}/nuxt --delete

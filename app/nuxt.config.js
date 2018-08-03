@@ -24,7 +24,7 @@ module.exports = {
   */
   build: {
     extractCSS: true,
-    publicPath: process.env.NUXT_PUBLIC_PATH || 'https://d1j7z3x433cnq3.cloudfront.net/',
+    publicPath: '/nuxt',
     /*
     ** Run ESLint on save
     */
