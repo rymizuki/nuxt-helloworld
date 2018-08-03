@@ -10,8 +10,29 @@ Globals:
     Function:
         Timeout: 60
 
-
 Resources:
+
+    AssetsBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            AccessControl: PublicRead
+            BucketName: nuxt-helloworld-sam-asset
+
+    AssetsPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+            Bucket: !Ref "AssetsBucket"
+            PolicyDocument:
+                Id: PublicRead
+                Version: '2012-10-17'
+                Statement:
+                    -
+                        Sid: ReadAccess
+                        Action:
+                            - s3:GetObject
+                        Effect: Allow
+                        Resource: !Sub "arn:aws:s3:::${AssetsBucket}/*"
+                        Principal: '*'
 
     HelloWorldFunction:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -21,7 +42,7 @@ Resources:
             Runtime: nodejs8.10
             Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
                 Variables:
-                    PARAM1: VALUE
+                    S3_BUCKET: nuxt-helloworld-sam
             Events:
                 Root:
                     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -35,10 +56,9 @@ Resources:
                         Method: get
 
 Outputs:
-
-    HelloWorldApi:
-      Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Assets:
+      Description: "URL for website hosted on s3"
+      Value: !GetAtt AssetsBucket.Arn
 
     HelloWorldFunction:
       Description: "Hello World Lambda Function ARN"

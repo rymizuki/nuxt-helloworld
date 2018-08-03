@@ -3,6 +3,7 @@ import { Nuxt } from 'nuxt'
 import awsServerlessExpress from 'aws-serverless-express'
 import awsServerlessExpressMiddleware from 'aws-serverless-express/middleware'
 import { Server } from 'tls';
+import api from './api'
 
 const config = require('../nuxt.config')
 config.dev = false
@@ -10,6 +11,9 @@ config.mode = 'universal'
 const nuxt = new Nuxt(config)
 
 const app = express()
+
+app.use('/api', api)
+
 app.use(nuxt.render)
 app.use(awsServerlessExpressMiddleware.eventContext)
 
