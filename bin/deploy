@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 SAM_SOURCE_DIR=app
 SAM_TEMPLATE_PATH=template.yml

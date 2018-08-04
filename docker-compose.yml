@@ -11,6 +11,6 @@ services:
       - ./:/app
     environment:
       - HOST=0.0.0.0
-    command: ['yarn', 'start']
+    command: ['./bin/dev']
     stdin_open: true
     tty: true
