@@ -6,18 +6,16 @@ jobs:
       - checkout
       - run:
           name: Build image
-          command: |
-            docker build . -t app
+          command: docker build . -t app
       - run:
           name: Build app
-          command: |
-            docker run -it app ./bin/build
+          command: docker run -it app ./bin/build
       - run:
           name: Export image
           command: |
             mkdir -p ~/caches
             docker save $(docker images -q) -o ~/caches/images.tar
-       - save_cache:
+      - save_cache:
           key: docker-{{ .Revision }}
           paths: ~/caches/images.tar
   deploy:
