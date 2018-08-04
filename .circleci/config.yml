@@ -18,14 +18,14 @@ jobs:
             docker save app:latest -o ~/caches/app-latest.tar
       - save_cache:
           key: docker-{{ .Revision }}
-          paths: ~/caches/images.tar
+          paths: ~/caches/app-latest.tar
   deploy:
     machine: true
     steps:
       - checkout
       - restore_cache:
           key: docker-{{ .Revision }}
-          paths: ~/caches/images.tar
+          paths: ~/caches/app-latest.tar
       - run:
           name: Restore Image
           command: |
