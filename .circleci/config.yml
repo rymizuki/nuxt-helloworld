@@ -8,10 +8,6 @@ jobs:
           name: Build image
           command: docker build . -t app
       - run:
-          name: Build app
-          command: docker run -it app ./bin/build
-      - run: docker images
-      - run:
           name: Export image
           command: |
             mkdir -p ~/caches
@@ -26,6 +22,8 @@ jobs:
       - restore_cache:
           key: docker-{{ .Revision }}
           paths: ~/caches/app-latest.tar
+      - run: docker build . -t app
+      - run: docker run -it app ./bin/build
       - run:
           name: Restore Image
           command: |
