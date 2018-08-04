@@ -15,7 +15,7 @@ jobs:
           name: Export image
           command: |
             mkdir -p ~/caches
-            docker save $(docker images -q) -o ~/caches/images.tar
+            docker save app:latest > ~/caches/app-latest.tar
       - save_cache:
           key: docker-{{ .Revision }}
           paths: ~/caches/images.tar
@@ -29,8 +29,7 @@ jobs:
       - run:
           name: Restore Image
           command: |
-            set +o pipefail
-            docker load -i ~/caches/images.tar | true
+            docker load < ~/caches/app-latest.tar
       - run: docker images
       - run:
           name: Deploy app
