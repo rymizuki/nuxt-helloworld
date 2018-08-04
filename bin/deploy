@@ -9,8 +9,6 @@ S3_SOURCE_DIR=${SAM_SOURCE_DIR}/build/nuxt/dist
 
 sam validate
 
-./bin/build
-
 find $SAM_SOURCE_DIR/node_modules -mtime +10950 -exec touch {} \;
 
 sam package \

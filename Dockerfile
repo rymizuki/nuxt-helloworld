@@ -16,12 +16,14 @@ RUN apk --update add tzdata \
 RUN rm -rf /var/cache/apk/*
 
 RUN pip install --upgrade pip \
- && pip install --user --upgrade awscli \
- && pip install --user --upgrade aws-sam-cli
+ && pip install --upgrade awscli \
+ && pip install --upgrade aws-sam-cli
+
+EXPOSE 3000
 
 WORKDIR /app
 COPY ./ /app
 
-EXPOSE 3000
+RUN ./bin/build
 
 CMD [ "./bin/dev" ]

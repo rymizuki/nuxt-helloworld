@@ -28,11 +28,7 @@ jobs:
             set +o pipefail
             docker load -i ~/caches/app-latest.tar | true
       - run: docker images
-      - run: docker run -it app ./bin/build
-      - run:
-          name: Deploy app
-          command: |
-            docker run -it app ./bin/deploy
+      - run: docker run -it app ./bin/deploy
 
 workflows:
   version: 2
