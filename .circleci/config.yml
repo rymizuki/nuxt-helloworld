@@ -13,9 +13,9 @@ jobs:
           command: |
             docker run -it app ./bin/build
       - run:
-          name: Export Image
+          name: Export image
           command: |
-            mkdir -p ~/caches-images
+            mkdir -p ~/caches
             docker save $(docker images -q) -o ~/caches/images.tar
        - save_cache:
           key: docker-{{ .Revision }}
@@ -49,4 +49,3 @@ workflows:
           filters:
             branches:
               only: tryal-sam
-
