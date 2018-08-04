@@ -22,18 +22,15 @@ jobs:
       - restore_cache:
           key: docker-{{ .Revision }}
           paths: ~/caches/app-latest.tar
-      - run: docker build . -t app
-      - run: docker run -it app ./bin/build
       - run:
           name: Restore Image
           command: |
             set +o pipefail
             docker load -i ~/caches/app-latest.tar | true
       - run: docker images
-      - run:
-          name: Deploy app
-          command: |
-            docker run -it app ./bin/deploy
+      - run: docker build . -t app
+      - run: docker run -it app ./bin/build
+      - run: docker run -it app ./bin/deploy
 
 workflows:
   version: 2
