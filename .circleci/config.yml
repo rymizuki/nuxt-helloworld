@@ -10,6 +10,7 @@ jobs:
       - run:
           name: Build app
           command: docker run -it app ./bin/build
+      - run: docker images
       - run:
           name: Export image
           command: |
