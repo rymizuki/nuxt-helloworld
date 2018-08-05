@@ -9,7 +9,7 @@ jobs:
           docker_layer_cache: true
       - run: ./bin/build
       - persist_to_workspace:
-          root: ~/build
+          root: ~/project
           paths:
             - ./app
   deploy:
