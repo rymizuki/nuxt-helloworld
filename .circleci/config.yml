@@ -18,7 +18,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/build
+          at: ~/project
       - run:
           name: Install tools
           command: |
