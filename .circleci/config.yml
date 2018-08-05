@@ -1,34 +1,35 @@
 version: 2
 jobs:
   build:
-    machine: true
+    working_directory: ~/build
+    docker:
+      image: node:8.11-alpine
     steps:
       - checkout
-      - run:
-          name: Build image
-          command: docker build . -t app
-      - run:
-          name: Export image
-          command: |
-            mkdir -p ~/caches
-            docker save app:latest -o ~/caches/app-latest.tar
-      - save_cache:
-          key: docker-{{ .Revision }}
-          paths: ~/caches/app-latest.tar
+      - run: ./bin/build
+      - persist_to_workspace:
+          root: ~/build
+          paths:
+            - ./app
   deploy:
-    machine: true
+    working_directory: ~/build
+    docker:
+      image: python:3.6-alpine
     steps:
       - checkout
-      - restore_cache:
-          key: docker-{{ .Revision }}
-          paths: ~/caches/app-latest.tar
+      - attach_workspace:
+          at: ~/build
       - run:
-          name: Restore Image
+          name: debug
           command: |
-            set +o pipefail
-            docker load -i ~/caches/app-latest.tar | true
-      - run: docker images
-      - run: docker run -it app ./bin/deploy
+            pwd
+            ls -lah
+      - run:
+          name: Install tools
+          command: |
+            pip install awscli
+            pip install aws-sam-cli
+      - run: ./bin/deploy
 
 workflows:
   version: 2
