@@ -20,15 +20,17 @@ jobs:
       - attach_workspace:
           at: ~/build
       - run:
-          name: debug
-          command: |
-            pwd
-            ls -lah
-      - run:
           name: Install tools
           command: |
             sudo pip install awscli
             sudo pip install aws-sam-cli
+      - run:
+          name: debug
+          command: |
+            pwd
+            ls -lah ./
+            ls -lah ./app
+      - run: aws configure set region ap-northeast-1
       - run: ./bin/deploy
 
 workflows:
