@@ -26,8 +26,8 @@ jobs:
       - run:
           name: Install tools
           command: |
-            pip install awscli
-            pip install aws-sam-cli
+            sudo pip install awscli
+            sudo pip install aws-sam-cli
       - run: ./bin/deploy
 
 workflows:
