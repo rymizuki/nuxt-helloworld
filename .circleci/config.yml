@@ -1,81 +1,40 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: circleci/node:8
     steps:
       - checkout
-      - run:
-          name: build image
-          command: docker-compose -f docker-compose.production.yml build
-      - run:
-          name: Start container and verify it's working
-          command: |
-            set -x
-            docker-compose -f docker-compose.production.yml up -d
-      - run:
-          name: export artifacts
-          command: |
-            set -x
-            mkdir -p ~/dist
-            docker cp `docker-compose ps -q app`:/app/build ~/dist/build
-            docker cp `docker-compose ps -q app`:/app/.nuxt ~/dist/.nuxt
-            docker cp `docker-compose ps -q app`:/app/node_modules ~/dist/node_modules
-            docker cp `docker-compose ps -q app`:/app/serverless.yml ~/dist/serverless.yml
+      - setup_remote_docker:
+          docker_layer_cache: true
+      - run: ./bin/build
       - persist_to_workspace:
-          root: ~/
+          root: ~/project
           paths:
-            - ./dist
-
-  deploy_static:
+            - ./app
+  deploy:
     docker:
-      - image: circleci/python:2.7-jessie
-    working_directory: ~/
+      - image: circleci/python:3
     steps:
+      - checkout
       - attach_workspace:
-          at: .
+          at: ~/project
       - run:
-          name: Install awscli
-          command: sudo pip install awscli
-      - run:
-          name: Deploy to S3
-          command: aws s3 sync ~/dist/.nuxt/dist s3://website-nuxt-helloworld --delete
-
-  deploy_functions:
-    docker:
-      - image: circleci/node:8-stretch
-    working_directory: ~/
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install serverless
-          command: sudo npm install -g serverless
-      - run:
-          name: cp
+          name: Install tools
           command: |
-            cp -R ~/dist/.nuxt ./.nuxt
-            cp -R ~/dist/build ./build
-            cp -R ~/dist/node_modules ./node_modules
-            cp -R ~/dist/serverless.yml ./serverless.yml
-      - run:
-          name: Deploy to S3
-          command: serverless deploy
+            sudo pip install awscli
+            sudo pip install aws-sam-cli
+      - run: aws configure set region ap-northeast-1
+      - run: ./bin/deploy
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
-      - deploy_static:
+      - deploy:
           requires:
             - build
           filters:
             branches:
-              only: master
-      - deploy_functions:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
-
+              only: tryal-sam

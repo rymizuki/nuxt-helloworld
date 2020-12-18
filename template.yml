@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    nuxt-helloworld-sam
+
+    A SAM template for nuxt-helloworld
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+    Function:
+        Timeout: 60
+
+Resources:
+
+    AssetsBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            AccessControl: PublicRead
+            BucketName: nuxt-helloworld-sam-asset
+
+    AssetsPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+            Bucket: !Ref "AssetsBucket"
+            PolicyDocument:
+                Id: PublicRead
+                Version: '2012-10-17'
+                Statement:
+                    -
+                        Sid: ReadAccess
+                        Action:
+                            - s3:GetObject
+                        Effect: Allow
+                        Resource: !Sub "arn:aws:s3:::${AssetsBucket}/*"
+                        Principal: '*'
+
+    HelloWorldFunction:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: app/
+            Handler: build/server.render
+            Runtime: nodejs8.10
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    S3_BUCKET: nuxt-helloworld-sam
+            Events:
+                Root:
+                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                    Properties:
+                        Path: /
+                        Method: get
+                Proxy:
+                    Type: Api
+                    Properties:
+                        Path: /{proxy+}
+                        Method: get
+
+Outputs:
+    Assets:
+      Description: "URL for website hosted on s3"
+      Value: !GetAtt AssetsBucket.Arn
+
+    HelloWorldFunction:
+      Description: "Hello World Lambda Function ARN"
+      Value: !GetAtt HelloWorldFunction.Arn
+
+    HelloWorldFunctionIamRole:
+      Description: "Implicit IAM Role created for Hello World function"
+      Value: !GetAtt HelloWorldFunctionRole.Arn

@@ -1,4 +1,6 @@
 module.exports = {
+  srcDir: './src/nuxt',
+  buildDir: './build/nuxt',
   /*
   ** Headers of the page
   */
@@ -22,7 +24,7 @@ module.exports = {
   */
   build: {
     extractCSS: true,
-    publicPath: 'https://d1j7z3x433cnq3.cloudfront.net/',
+    publicPath: '/nuxt',
     /*
     ** Run ESLint on save
     */
@@ -39,6 +41,5 @@ module.exports = {
   },
   render: {
     gzip: false
-  }
+  },
 }
-
